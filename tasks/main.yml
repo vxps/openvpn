@@ -31,6 +31,8 @@
   args:
     chdir: "{{ easy_rsa }}"
     creates: "{{ easy_rsa_pki }}/issued/server.crt"
+  environment:
+    EASYRSA_BATCH: "yes"
 
 - name: Generate Diffie-Hellman parameters
   command:
