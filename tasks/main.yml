@@ -6,11 +6,13 @@
     state: present
 
 - name: Create Easy-RSA directory
-  command: make-cadir "{{ easy-rsa }}"
-  creates: "{{ easy-rsa }}"
-
+  command: 
+    cmd: make-cadir "{{ easy-rsa }}"
+    creates: "{{ easy-rsa }}"
+  
 - name: Initialize PKI
-  command: ./easyrsa init-pki
+  shell:
+   ./easyrsa init-pki
   args:
     chdir: "{{ easy-rsa }}"
   creates: "{{ easy-rsa-pki }}"
