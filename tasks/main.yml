@@ -1,5 +1,5 @@
 - name: Install OpenVPN and Easy-RSA
-  ansible.builtin.apt:
+  apt:
     name:
       - openvpn
       - easy-rsa
@@ -11,21 +11,19 @@
     creates: "{{ easy_rsa }}"
   
 - name: Initialize PKI
-  shell:
-   ./easyrsa init-pki
-  args:
+  command:
+    cmd: ./easyrsa init-pki
     chdir: "{{ easy_rsa }}"
     creates: "{{ easy_rsa_pki }}"
 
 - name: Create CA certificate
-  shell:
-    ./easyrsa build-ca nopass
-  args:
+  command:
+    cmd: ./easyrsa build-ca nopass
     chdir: "{{ easy_rsa }}"
     creates: "{{ easy_rsa_pki }}/ca.crt"
 
 - name: Generate server certificate request and sign it
-  shell: 
+  shell: |
     ./easyrsa gen-req server nopass
     echo "yes" | ./easyrsa sign-req server server
   args:
@@ -33,18 +31,16 @@
     creates: "{{ easy_rsa_pki }}/issued/server.crt"
 
 - name: Generate Diffie-Hellman parameters
-  shell:
-    ./easyrsa gen-dh
-  args:
+  command:
+    cmd: ./easyrsa gen-dh
     chdir: "{{ easy_rsa }}"
     creates: "{{ easy_rsa_pki }}/dh.pem"
 
 - name: Generate TLS-Auth key
-  shell: 
-    openvpn --genkey --secret pki/ta.key
-  args:
+  command:
+    cmd: openvpn --genkey --secret pki/ta.key
     chdir: "{{ easy_rsa }}"
-    creates: "{{ asy-rsa-pki }}/ta.key"
+    creates: "{{ easy_rsa_pki }}/ta.key"
 
 - name: Check OpenVPN directory
   file:
@@ -55,7 +51,7 @@
 - name: Copy OpenVPN files
   copy:
     src: "{{ item }}"
-    dest: "{{ openvpn_conf_dir }}/"
+    dest: "{{ openvpn_config }}/"
     remote_src: yes
   with_items:
     - "{{ easy_rsa_pki }}/ca.crt"
@@ -66,7 +62,7 @@
 
 - name: Apply OpenVPN config
   template:
-    src: "{{ openvpn_server_conf }}"
+    src: "{{ server_config }}"
     dest: /etc/openvpn/server.conf
 
 - name: Start OpenVPN server
@@ -77,5 +73,5 @@
 
 - name: Create client config
   template:
-    src: "{{ openvpn_server_conf }}"
+    src: "{{ client_config }}"
     dest: "client.ovpn"
