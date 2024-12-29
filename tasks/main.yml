@@ -21,6 +21,8 @@
     cmd: ./easyrsa build-ca nopass
     chdir: "{{ easy_rsa }}"
     creates: "{{ easy_rsa_pki }}/ca.crt"
+  environment:
+    EASYRSA_BATCH: "yes"
 
 - name: Generate server certificate request and sign it
   shell: |
