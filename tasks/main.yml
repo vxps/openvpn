@@ -7,43 +7,43 @@
 
 - name: Create Easy-RSA directory
   command: 
-    cmd: make-cadir "{{ easy-rsa }}"
-    creates: "{{ easy-rsa }}"
+    cmd: make-cadir "{{ easy_rsa }}"
+    creates: "{{ easy_rsa }}"
   
 - name: Initialize PKI
   shell:
    ./easyrsa init-pki
   args:
-    chdir: "{{ easy-rsa }}"
-    creates: "{{ easy-rsa-pki }}"
+    chdir: "{{ easy_rsa }}"
+    creates: "{{ easy_rsa_pki }}"
 
 - name: Create CA certificate
   shell:
     ./easyrsa build-ca nopass
   args:
-    chdir: "{{ easy-rsa }}"
-    creates: "{{ easy-rsa-pki }}/ca.crt"
+    chdir: "{{ easy_rsa }}"
+    creates: "{{ easy_rsa_pki }}/ca.crt"
 
 - name: Generate server certificate request and sign it
   shell: 
     ./easyrsa gen-req server nopass
     echo "yes" | ./easyrsa sign-req server server
   args:
-    chdir: "{{ easy-rsa }}"
-    creates: "{{ easy-rsa-pki }}/issued/server.crt"
+    chdir: "{{ easy_rsa }}"
+    creates: "{{ easy_rsa_pki }}/issued/server.crt"
 
 - name: Generate Diffie-Hellman parameters
   shell:
     ./easyrsa gen-dh
   args:
-    chdir: "{{ easy-rsa }}"
-    creates: "{{ easy-rsa-pki }}/dh.pem"
+    chdir: "{{ easy_rsa }}"
+    creates: "{{ easy_rsa_pki }}/dh.pem"
 
 - name: Generate TLS-Auth key
   shell: 
     openvpn --genkey --secret pki/ta.key
   args:
-    chdir: "{{ easy-rsa }}"
+    chdir: "{{ easy_rsa }}"
     creates: "{{ asy-rsa-pki }}/ta.key"
 
 - name: Check OpenVPN directory
@@ -58,11 +58,11 @@
     dest: "{{ openvpn_conf_dir }}/"
     remote_src: yes
   with_items:
-    - "{{ easy-rsa-pki }}/ca.crt"
-    - "{{ easy-rsa-pki }}/issued/server.crt"
-    - "{{ easy-rsa-pki }}/private/server.key"
-    - "{{ easy-rsa-pki }}/dh.pem"
-    - "{{ easy-rsa-pki }}/ta.key"
+    - "{{ easy_rsa_pki }}/ca.crt"
+    - "{{ easy_rsa_pki }}/issued/server.crt"
+    - "{{ easy_rsa_pki }}/private/server.key"
+    - "{{ easy_rsa_pki }}/dh.pem"
+    - "{{ easy_rsa_pki }}/ta.key"
 
 - name: Apply OpenVPN config
   template:

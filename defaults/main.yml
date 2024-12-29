@@ -3,8 +3,8 @@ openvpn_protocol: udp
 openvpn_conf_dir: /etc/openvpn/config
 openvpn_server_conf: server.conf.j2
 openvpn_server_conf: client.ovpn.j2
-easy-rsa: /etc/openvpn/easy-rsa
-easy-rsa-pki: /etc/openvpn/easy-rsa/pki
+easy_rsa: /etc/openvpn/easy-rsa
+easy_rsa_pki: /etc/openvpn/easy-rsa/pki
 openvpn_pki: /etc/openvpn/pki
 openvpn_ip: 10.8.0.0
 openvpn_mask: 255.255.255.0
