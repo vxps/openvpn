@@ -1,0 +1,22 @@
+port {{ openvpn_port }}
+proto {{ openvpn_protocol }}
+dev tun
+
+server {{ openvpn_ip }} {{ openvpn_mask }}
+ifconfig-pool-persist ipp.txt
+
+push "route {{ openvpn_ip }} {{ openvpn_mask }}"
+
+keepalive 10 120
+cipher AES-256-CBC
+
+ca {{ openvpn_pki }}/ca.crt
+cert {{ openvpn_pki }}/server.crt
+key {{ openvpn_pki }}/server.key
+dh {{ openvpn_pki }}/dh.pem
+tls-auth /etc/openvpn/ta.key 0
+
+user vagrant
+group vagrant
+persist-key
+persist-tun
