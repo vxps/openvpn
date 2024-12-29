@@ -2,7 +2,7 @@ openvpn_port: 1194
 openvpn_protocol: udp
 openvpn_conf_dir: /etc/openvpn/config
 openvpn_server_conf: server.conf.j2
-openvpn_server_conf: client.ovpn.j2
+openvpn_client_conf: client.ovpn.j2
 easy_rsa: /etc/openvpn/easy-rsa
 easy_rsa_pki: /etc/openvpn/easy-rsa/pki
 openvpn_pki: /etc/openvpn/pki

@@ -55,7 +55,7 @@
 - name: Copy OpenVPN files
   copy:
     src: "{{ item }}"
-    dest: "{{ openvpn_config }}/"
+    dest: "{{ openvpn_conf_dir }}/"
     remote_src: yes
   with_items:
     - "{{ easy_rsa_pki }}/ca.crt"
@@ -66,7 +66,7 @@
 
 - name: Apply OpenVPN config
   template:
-    src: "{{ server_config }}"
+    src: "{{ openvpn_server_conf }}"
     dest: /etc/openvpn/server.conf
 
 - name: Start OpenVPN server
@@ -77,5 +77,5 @@
 
 - name: Create client config
   template:
-    src: "{{ client_config }}"
+    src: "{{ openvpn_client_conf }}"
     dest: "client.ovpn"
