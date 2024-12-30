@@ -57,6 +57,9 @@
     src: "{{ item }}"
     dest: "{{ openvpn_conf_dir }}/"
     remote_src: yes
+    mode: "0644"
+    owner: root
+    group: root
   with_items:
     - "{{ easy_rsa_pki }}/ca.crt"
     - "{{ easy_rsa_pki }}/issued/server.crt"
